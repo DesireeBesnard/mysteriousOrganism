@@ -44,18 +44,25 @@ function Paequor(specimenNum, dna) {
                 window.alert("L'identifiant doit être positif");
             }
 
-            const comparedDNA = pAequorsDB[ident-1].dna;
+            const comparedDNA = pAequorsDB[ident-1];
 
             let simCounter = 0;
             let simPositions = [];
             for (let i = 0; i < this.dna.length; i++) {
-                if (this.dna[i] === comparedDNA[i]) {
+                if (this.dna[i] === comparedDNA.dna[i]) {
                     simCounter++;
                     simPositions.push(i);
                 }
             }
             console.log(`Similarities counter = ${simCounter}`);
             console.log(`Similarities positions: ${simPositions}`);
+
+            const resultsInPourcentage = ((simCounter/this.dna.length) * 100);
+
+            // Then I round the result to the hundredth
+            const roundedResult = Math.round(resultsInPourcentage * 100) / 100;
+
+            console.log(`The percentage of similarity between pAequor${this.specimenNum} and pAequor${comparedDNA.specimenNum} is ${roundedResult}%`);
             return simCounter;
         }
 }
