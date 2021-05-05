@@ -57,14 +57,32 @@ function Paequor(specimenNum, dna) {
             console.log(`Similarities counter = ${simCounter}`);
             console.log(`Similarities positions: ${simPositions}`);
 
-            const resultsInPourcentage = ((simCounter/this.dna.length) * 100);
-
             // Then I round the result to the hundredth
-            const roundedResult = Math.round(resultsInPourcentage * 100) / 100;
+            const resultsInPourcentage = Math.round((simCounter/this.dna.length) * 10000) / 100;
 
-            console.log(`The percentage of similarity between pAequor${this.specimenNum} and pAequor${comparedDNA.specimenNum} is ${roundedResult}%`);
-            return simCounter;
+            console.log(`The percentage of similarity between pAequor${this.specimenNum} and pAequor${comparedDNA.specimenNum} is ${resultsInPourcentage}%`);
+            return simCounter, simPositions, resultsInPourcentage;
+        },
+        this.willLikelySurvive = () => {
+
+            let survivalCounter = 0;
+            for (let i = 0; i < this.dna.length; i++) {
+                if (this.dna[i] === "C" || this.dna[i] === "G") {
+                    survivalCounter++;
+                }
+            }
+            
+            console.log(`Survival Counter = ${survivalCounter}`);
+            const survivalPourcentage = Math.round((survivalCounter / this.dna.length) * 10000) / 100;
+            console.log(`Survival Pourcentage = ${survivalPourcentage}`);
+
+            if (survivalPourcentage >= 60) {
+                return true;
+            } else {
+                return false;
+            }
         }
+
 }
 
 // Each individual will be unique thanks to a serial number
@@ -91,10 +109,11 @@ const pAequor = (ident) => {
     return organism;
 }
 
-newpAequor();
-newpAequor();
-newpAequor();
-console.log(pAequorsDB);
 
-pAequor(2).compareDNA(1);
+// To test the compareDNA method
+// newpAequor();
+// newpAequor();
+// console.log(pAequorsDB);
+// pAequor(2).compareDNA(1);
+// console.log(pAequor(2).willLikelySurvive());
 
