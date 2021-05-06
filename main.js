@@ -1,5 +1,6 @@
 // STEP 1: pAequors array will contain the objects created
 pAequorsDB = [];
+viablepAequorsDB = [];
 
 
 // STEP 2: I built a constructor function to create as many object i want and store them in an array
@@ -54,10 +55,9 @@ function Paequor(specimenNum, dna) {
                     simPositions.push(i);
                 }
             }
-            console.log(`Similarities counter = ${simCounter}`);
+       
             console.log(`Similarities positions: ${simPositions}`);
 
-            // Then I round the result to the hundredth
             const resultsInPourcentage = Math.round((simCounter/this.dna.length) * 10000) / 100;
 
             console.log(`The percentage of similarity between pAequor${this.specimenNum} and pAequor${comparedDNA.specimenNum} is ${resultsInPourcentage}%`);
@@ -72,17 +72,23 @@ function Paequor(specimenNum, dna) {
                 }
             }
             
-            console.log(`Survival Counter = ${survivalCounter}`);
             const survivalPourcentage = Math.round((survivalCounter / this.dna.length) * 10000) / 100;
-            console.log(`Survival Pourcentage = ${survivalPourcentage}`);
 
             if (survivalPourcentage >= 60) {
                 return true;
             } else {
                 return false;
             }
-        }
+        },
+        this.complementStrand = () => {
 
+            const matchedBase = (base) => {
+                const pairing = {A: "T", T: "A", C: "G", G: "C"};
+                return pairing[base];
+            }
+
+            return this.dna.map(x => matchedBase(x));
+        }
 }
 
 // Each individual will be unique thanks to a serial number
@@ -98,22 +104,46 @@ const newpAequor = () => {
     const specimenNum = serialNumber;
     const dna = mockUpStrand();
     const object = new Paequor(specimenNum, dna);
-    pAequorsDB.push(object);
-    return pAequorsDB;
+    return object;
+}
+
+const pAequorFactory = (nb) => {
+    for (let i = 0; i < nb; i++) {
+        let object = newpAequor();
+        pAequorsDB.push(object);
+    }
+    console.log(pAequorsDB);
+}
+
+// Function to create a chosen number of organisms
+const viablePAequorFactory = (nb) => {
+
+    while (viablepAequorsDB.length < nb) {  
+
+        let object = newpAequor();
+
+        if (object.willLikelySurvive() === true) {
+            viablepAequorsDB.push(object);
+        }
+
+    }
+    console.log(viablepAequorsDB);
 }
 
 // STEP 3 function to get one specific object
-const pAequor = (ident) => {
-    const organism = pAequorsDB[ident-1];
+const pAequor = (ident, db) => {
+    const organism = db[ident-1];
     // console.log(organism);
     return organism;
 }
 
+pAequorFactory(1);
+// viablePAequorFactory(30);
 
-// To test the compareDNA method
-// newpAequor();
-// newpAequor();
-// console.log(pAequorsDB);
-// pAequor(2).compareDNA(1);
-// console.log(pAequor(2).willLikelySurvive());
+console.log(pAequor(1, pAequorsDB).complementStrand());
+
+
+
+
+
 
